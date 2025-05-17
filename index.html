@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อมูลตำรับยา</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8bbd0; /* สีชมพูอ่อน */
+            color: #212121; /* สีดำ */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        .column {
+            background-color: #ffffff; /* พื้นหลังสีขาว */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+          color: #d81b60; /* สีชมพูเข้ม */
+        font-weight: bold; /* กำหนดให้ตัวอักษรหนา */
+        font-size: 20px; /* ขยายขนาดตัวอักษร */
+        letter-spacing: 1px; /* เพิ่มระยะห่างระหว่างตัวอักษร */
+        text-transform: uppercase; /* เปลี่ยนตัวอักษรเป็นตัวพิมพ์ใหญ่ทั้งหมด */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ตัวอักษร */
+        margin-bottom: 8px; /* เพิ่มระยะห่างระหว่าง label และเนื้อหา */
+        transition: color 0.3s ease; /* เพิ่มการเปลี่ยนสีแบบนุ่มนวล */
+        }
+
+        h3 {
+          color: #d81b60; /* สีชมพูเข้ม */
+        font-weight: bold; /* กำหนดให้ตัวอักษรหนา */
+        font-size: 20px; /* ขยายขนาดตัวอักษร */
+        letter-spacing: 1px; /* เพิ่มระยะห่างระหว่างตัวอักษร */
+        text-transform: uppercase; /* เปลี่ยนตัวอักษรเป็นตัวพิมพ์ใหญ่ทั้งหมด */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ตัวอักษร */
+        margin-bottom: 8px; /* เพิ่มระยะห่างระหว่าง label และเนื้อหา */
+        transition: color 0.3s ease; /* เพิ่มการเปลี่ยนสีแบบนุ่มนวล */
+        }
+
+        h4 {
+          color: #d81b60; /* สีชมพูเข้ม */
+        font-weight: bold; /* กำหนดให้ตัวอักษรหนา */
+        font-size: 30px; /* ขยายขนาดตัวอักษร */
+        letter-spacing: 1px; /* เพิ่มระยะห่างระหว่างตัวอักษร */
+        text-transform: uppercase; /* เปลี่ยนตัวอักษรเป็นตัวพิมพ์ใหญ่ทั้งหมด */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ตัวอักษร */
+        margin-bottom: 8px; /* เพิ่มระยะห่างระหว่าง label และเนื้อหา */
+        transition: color 0.3s ease; /* เพิ่มการเปลี่ยนสีแบบนุ่มนวล */
+        }
+
+        h5 {
+          color: #d81b60; /* สีชมพูเข้ม */
+        font-weight: bold; /* กำหนดให้ตัวอักษรหนา */
+        font-size: 30px; /* ขยายขนาดตัวอักษร */
+        letter-spacing: 1px; /* เพิ่มระยะห่างระหว่างตัวอักษร */
+        text-transform: uppercase; /* เปลี่ยนตัวอักษรเป็นตัวพิมพ์ใหญ่ทั้งหมด */
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ตัวอักษร */
+        margin-bottom: 8px; /* เพิ่มระยะห่างระหว่าง label และเนื้อหา */
+        transition: color 0.3s ease; /* เพิ่มการเปลี่ยนสีแบบนุ่มนวล */
+        }
+
+
+        .medicine-list {
+            list-style-type: none;
+            padding: 0;
+            display: none; /* ซ่อนรายการตัวยา */
+        }
+        .medicine-list li {
+            padding: 10px;
+            margin: **10px 0**;
+            background: linear-gradient(135deg, #f06292, #e91e63); /* สีกลางชมพู */
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        .medicine-list li:hover {
+            background: linear-gradient(135deg, #c2185b, #d81b60); /* สีชมพูเข้มขึ้น */
+            transform: scale(1.05);
+        }
+        #search {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #d81b60; /* สีชมพู */
+            border-radius: 6px;
+            outline: none;
+            font-size: 16px;
+            background-color: #f8bbd0; /* สีชมพูอ่อน */
+        }
+        .result {
+          margin-top: 20px; /* ระยะห่างจากด้านบน 20 พิกเซล */
+          font-weight: bold; /* ทำให้ข้อความหนา */
+          color: #333; /* สีข้อความเป็นสีเทาเข้ม */
+          padding: 20px; /* ระยะห่างภายใน (padding) 20 พิกเซล รอบๆ */
+          border: 1px solid #ddd; /* กรอบขอบเป็นเส้นทึบ 1 พิกเซล สีเทาอ่อน */
+          background-color:rgb(130, 248, 84); /* สีพื้นหลังเป็นสีขาว */
+          border-radius: 8px; /* มุมกรอบโค้งมน 8 พิกเซล */
+          font-size: 18px; /* ขนาดตัวอักษร 18 พิกเซล */
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เงาด้านนอกกล่อง 0 พิกเซลแนวนอน, 4 พิกเซลแนวตั้ง, เบลอ 8 พิกเซล */
+
+
+
+        }
+        .btn-group {
+            margin-bottom: 20px;
+        }
+        .btn-group button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            background-color: #d81b60; /* สีชมพูเข้ม */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-group button:hover {
+            background-color: #c2185b; /* สีชมพูเข้มขึ้น */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="column">
+        <h4>โปรแกรม Pakinn หาข้อมูลตำรับยาจีน 1</h4>
+        <label for="search">ค้นหาชื่อตำรับยา/ยาจีน:</label>
+        <input type="text" id="search" onkeyup="searchMedicine()" placeholder="🔍 ค้นหาชื่อยา...">
+
+        <div class="btn-group">
+            <button onclick="showCategory('group1')">1.กลุ่มตำรับยา 治燥剂</button>
+             <button onclick="showCategory('group19')"> 2.กลุ่มตำรับยา 疏散外风</button>
+             <button onclick="showCategory('group20')"> 3.กลุ่มตำรับยา 平熄内风</button>
+             <button onclick="showCategory('group21')"> 4.กลุ่มตำรับยา 温里剂</button>
+             <br><br><br>
+
+            <button onclick="showAll()">แสดงทั้งหมด</button>
+            <button onclick="window.location.href='home.php'">Home🏠</button>
+        </div>
+
+        <h3>1. กลุ่มตำรับยา 治燥剂</h3>
+        <ul id="medicineList1" class="medicine-list">
+             <li data-info="ชื่อตำรับ  桑杏汤: <br><br>
+        组成: 桑叶、杏仁、沙参、象贝、香豉、栀皮、梨皮 <br><br>
+        功用: 轻宣温燥 <br><br>
+        主治:外感温燥证。头痛、身热不甚、口渴咽干鼻燥，干咳无痰，或痰少而粘，舌红，苔薄白。">桑杏汤</li>
+            
+              <li data-info="ชื่อตำรับ  清燥球肺汤: <br><br>
+        组成: 桑叶、石膏、甘草、胡麻仁、真阿胶、枇杷叶、人参、麦门冬、杏仁 <br><br>
+        功用: 清燥润肺，养阴益气 <br><br>
+        主治: 温燥伤肺重证头痛、身热，干咳无痰，气逆而喘，咽喉干燥，鼻燥，胸满胁痛，心烦口渴，舌干无苔，脉虚大而数。
+">清燥球肺汤</li>
+
+			<li data-info="ชื่อตำรับ  杏亦散: <br><br>
+        组成: 苏叶、杏仁、半夏、茯苓、前胡、橘皮、苦桔梗、枳壳、甘草、生姜、大枣 <br><br>
+        功用: 轻宣凉燥，理肺化痰 <br><br>
+        主治: 外感凉燥证。头微痛，恶寒无汗，咳嗽痰稀，鼻塞咽干，苔白，脉弦">杏亦散</li>
+        
+        			<li data-info="ชื่อตำรับ  养阴清肺汤: <br><br>
+        组成: 大生地、麦冬、玄参、生甘草、薄荷、贝母、丹皮、白芍 <br><br>
+        功用: 养阴清肺，解毒利咽 <br><br>
+        主治: 白喉之阴虚燥热证。喉间起白如腐，不易拭去，并逐渐扩展，病变甚速，咽喉肿痛，初起或发热或不发热，鼻干唇燥，或咳或不咳，呼吸有声，似喘非喘，脉数无力或细数。">养阴清肺汤</li>
+        
+        
+        	<li data-info="ชื่อตำรับ  百合固金汤: <br><br>
+        组成: 熟地、生地、归身、白芍、甘草、桔梗、玄参、贝母、麦冬、百合 <br><br>
+        功用: 滋养肺肾，止咳化痰 <br><br>
+        主治: 肺肾阴亏，虚火上炎证。咳嗽气喘，痰中带血，咽喉燥痛，头晕目眩，午后潮热，舌红少苔，脉细数">百合固金汤</li>
+        
+       <li data-info="ชื่อตำรับ  麦门冬汤: <br><br>
+        组成:  麦门冬、半夏、人参、甘草、粳米、大枣 <br><br>
+        功用:  清养肺胃，降逆下气 <br><br>
+        主治: ①虚热肺痿。咳嗽气喘，咽喉不利，咯痰不爽，或咳唾涎沫，口干咽燥，手足心热，舌红少苔，脉虚数。②胃阴不足证。呕吐，纳少，呃逆，口渴咽干，舌红少苔，脉虚数
+">麦门冬汤</li>
+
+        <li data-info="ชื่อตำรับ  增液汤: <br><br>
+        组成:  玄参30g、麦冬连心24g、细生地24g <br><br>
+        功用:  增液润燥 <br><br>
+        主治: 阳明温病、津亏便秘证。大便秘结，口渴，舌干红，脉细数或沉而无力">增液汤</li>
+        
+        </ul>
+        
+        
+         <h3>2.  กลุ่มตำรับยา 疏散外风</h3>
+        <ul id="medicineList19" class="medicine-list">
+       
+        <li data-info="ชื่อตำรับ  川穹茶调散: <br><br>
+        组成: 川穹  薄荷  荆芥  羌活、白芷  细辛   防风  灸甘草  清茶 <br><br>
+        功用:  <br><br>
+        主治:1、本方为主治风邪头痛的常用方剂。以头痛,鼻寒,脉浮为证治要点。2、现代运用:感冒头痛、偏头痛、血管神经性头痛、慢性鼻炎性头痛属风邪所致者">川穹茶调散</li>
+           
+
+          <li data-info="ชื่อตำรับ  小活络丹: <br><br>
+        组成:  川乌、草乌、乳香、没药、天南星、地龙 <br><br>
+        功用:  法凩除湿，化痰通络, 活血止痛 <br><br>
+        主治: ①风寒湿痹证。肢体筋脉疼痛，麻木拘挛，关节屈伸不利，疼痛游走不定，舌淡紫，苔白，脉沉弦或涩。
+②中风。中经络、中风后遗症:筋脉挛痛,关节屈伸不利">小活络丹</li>
+           
+
+           
+          <li data-info="ชื่อตำรับ  牵正散: <br><br>
+        组成:  白附子、僵蚕、全蝎各等分生用(去毒) <br><br>
+        功用:  祛风化痰，通络止痉 <br><br>
+        主治: 风中经络,日眼喎斜、或面肌抽动、舌淡红、苔白。">牵正散</li>
+           
+
+           <li data-info="ชื่อตำรับ  消风散: <br><br>
+        组成:  荆芥、防风、牛蒡子、蝉衣、苍术、苦参、本通、知母、当归、胡麻仁、生地、甘草 <br><br>
+        功用:  疏风除湿、清热养血(治风先治血,血行风自灰) <br><br>
+        主治: 风疹、湿疹皮朕疹出色红,或遍身云片斑点,瘙痒,孤破后滲出津水,苔白或黄,脉浮数。">消风散</li>
+        
+         </ul>
+            
+        
+        <h3>3.  กลุ่มตำรับยา 平熄内风</h3>
+        <ul id="medicineList20" class="medicine-list">
+       
+         <li data-info="ชื่อตำรับ  羚角钩藤汤: <br><br>
+        组成: 羚角片先煎，钩藤后入，桑叶，菊花，生地，生白芍，川贝母，淡竹茹，与羚羊角先煎代水，茯神，生甘草 <br><br>
+        功用: 凉肝熄风,増液舒筋 <br><br>
+        主治:肝经熟盛，熟极生风证。
+高热不退、烦闷燥扰,手足抽搐、友为痉厥，舌降而干，或舌焦起刺，脉眩而数">羚角钩藤汤</li>
+
+
+
+         <li data-info="ชื่อตำรับ  镇肝熄风汤: <br><br>
+        组成: 杯牛膝   生痛石(各30g) 生龙骨    生牡蛎     生龟版(各15g)生杭芍    玄参         天冬(各15g) 川楝子    生麦芽     茵陈(各6g)甘草(4.5g)
+ <br><br>
+        功用: 镇肝熄风,滋阴潜阳 <br><br>
+        主治:类中风(内中风):头目眩晕，目胀耳鸣，脑部热痛，心中烦热，面色如醉，或时常噫气，或肢体渐觉不利，口角渐形歪斜;甚或眩晕颠仆，昏不知人，移吋始醒;或醒后不能复原, 脉眩长有力">镇肝熄风汤</li>
+
+
+        <li data-info="ชื่อตำรับ  天麻钩藤饮: <br><br>
+        组成: 天麻(9g)、钩藤后下 、川牛膝(12g)、石决明先煎(18g)、栀子、 黄芩、 杜仲、 桑寄生、夜交藤 、朱茯神 、益母草(各9g) <br><br>
+        功用: 平肝熄风,清热活血,补益肝肾 <br><br>
+        主治:肝阳偏亢,风阳上扰证。头痛、眩晕,伴失眠。">天麻钩藤饮</li>
+        
+        
+         </ul>
+        
+        
+        
+        
+        
+        
+        <div id="result1" class="result"></div>
+    </div>
+    <div class="column">
+        <h5>โปรแกรม Pakinn หาข้อมูลตัวยาจีน 1</h5>
+        
+        <button onclick="showCategory('group2')">1.กลุ่มยาขับความชื้น化湿 利水消肿</button>
+            <button onclick="showCategory('group3')">2.กลุ่มยาขับร้อนชื้น利湿退黄</button>
+            <button onclick="showCategory('group4')">3.กลุ่มยา อบอุ่นภายใน 温中散寒</button>
+            <button onclick="showCategory('group5')">4.กลุ่มยา 行气，破气，理气</button>
+          
+           
+            <button onclick="showCategory('group6')">5.กลุ่มยา 消食</button>
+            <button onclick="showCategory('group7')">6.กลุ่มยา 杀虫消积</button>
+            <button onclick="showCategory('group8')">7.กลุ่มยา 清热息风 平肝潜阳</button>
+            
+            
+            <button onclick="showCategory('group9')">8.กลุ่มยา开窍醒神 定惊息风</button>
+            <button onclick="showCategory('group10')">9.กลุ่มยา 补气 </button>
+            <button onclick="showCategory('group11')">10.กลุ่มยา 补肾 </button>
+                                
+            <button onclick="showCategory('group12')">11.กลุ่มยา 补血/ 活血/ 养阴 / 生津 </button>
+          	<button onclick="showCategory('group13')">12.กลุ่มยา  益气  /固表止汗  </button>
+          
+            <button onclick="showCategory('group15')">13.กลุ่มยา  凉血止血 / 解毒敛疮 / 温经  </button>
+          
+            <button onclick="showCategory('group16')">14.กลุ่มยา  活血祛瘀 / 行气止痛/调经  </button>
+            
+            <button onclick="showCategory('group17')">15.กลุ่มยา  活血调经、祛瘀止痛/凉血 /通便/平喘/破血行气  </button>
+                
+            <button onclick="showCategory('group18')">16.กลุ่มยา  กลุ่มยา  燥湿化痰、清热化痰/降气化痰/通便/平喘 </button>
+
+
+
+        <h3>1. กลุ่มยาขับความชื้น 化湿 利水消肿</h3>
+        <ul id="medicineList2" class="medicine-list">
+            <li data-info="藿香 Huo Xiang: <br><br> 性能: 辛，微温。归脾、胃、肺经 <br><br> 功效: 化湿止呕，解暑; <br><br> 用法: 5～10g，煎服 <br> 使用注意 阴虚血燥者不宜用">藿香 Huo Xiang</li>
+            
+         
+            <li data-info="厚朴 Hou Po: <br><br> 性能: 苦、辛，温。归脾、胃、肺、大肠<br><br> 功效: 燥湿消痰，下气除满; <br><br> 用法: 煎服，3～10g。或入丸散<br> 使用注意: 本品易耗气伤津，故气虚津亏者及孕妇当慎用">厚朴 Hou Po</li>
+            
+             <li data-info="白豆蔻 Bai Dou Kou:<br> <br><br>
+        性能: 辛、温。归肺、脾、胃经
+        功效: 化湿行气 ，温中止呕; <br><br>
+        用法: 煎服，3～6g，入汤剂宜后下<br>使用注意: 阴虚血燥者慎用">白豆蔻 Bai Dou Kou</li>
+        
+         <li data-info="薏苡仁 Yi Yi Ren:<br> <br>
+        性能:甘、淡，凉。归脾、胃、肺经<br><br>
+        功效: 利水消肿 ，渗湿，健脾，除痹 ，清热排脓 ; <br><br> 
+        用法: 煎服，9～30g<br>使用注意:津液不足者慎用 ">薏苡仁 Yi Yi Ren</li>
+        
+        
+        
+        <li data-info="木通 Mu Tong: <br> <br>
+        性能: 苦，寒。有毒归心、小肠、膀胱经<br> <br>
+        功效: 利尿通淋，清心火，通经下乳; <br><br> 
+        用法: 】煎服,3～6g<br>使用注意:本品有毒，故用量不宜过大，也不宜久服，肾功能不全者及孕妇忌服，内无湿热者、儿童与年老体弱者慎用 ">木通 Mu Tong</li>
+        
+         <li data-info="石韦 Shi wei: <br> <br>
+        性能: 甘、苦，微寒。   归肺、膀胱经<br> <br>
+        功效: 利尿通淋，清肺止咳，凉血止血; <br> <br>
+        用法: 6-12g ">石韦 Shi wei</li>
+        
+         <li data-info="海 金 沙  Hai jin sha: <br> <br>
+        性能: 甘、咸，寒。归膀胱、小肠经<br> <br>
+        功效: 利尿通淋，止痛; <br> <br>
+        用法: 煎服 6～15g。包煎。<br>使用注意:肾阴亏虚者忌用 ">海 金 沙  Hai jin sha</li> 
+        
+           <li data-info="地肤子 Di  fu  zi: <br> <br>
+        性能: 辛、苦，寒。归肾、膀胱经<br> <br>
+        功效: 利尿通淋  ，清热利湿，止痒; <br> <br>
+        用法: 煎服,9～15g。外用适量">地肤子 Di  fu  zi</li>
+       
+          <li data-info="苍术  Cang zhu: <br> <br>
+        性能: 辛、苦，温。归脾、胃，肝经<br> <br>
+        功效: 燥湿健脾，祛风散寒; <br> <br>
+        用法: 煎服，5～10g<br>使用注意:阴虚内热，气虚多汗者忌用。">苍术  Cang zhu</li>
+        
+         <li data-info="砂仁Sha ren: <br> <br>
+        性能: 辛，温。归脾、胃、肾经<br> <br>
+        功效: 化湿行气 ，温中止泻，安胎; <br> <br>
+        用法: 煎服，3～6 g，入汤剂宜后下<br>使用注意:阴虚血燥者慎用。">砂仁Sha ren</li>
+        
+        <li data-info="茯  苓  Fu ling: <br> <br>
+        性能: 甘、淡，平。归心、脾、肾经<br> <br>
+        功效: 利水消肿 ，渗湿，健脾，宁心安神，解暑; <br> <br>
+        用法: 煎服，9～15g<br>使用注意:虚寒精滑者忌服。">茯  苓  Fu ling</li>
+        
+                <li data-info="猪苓  Zhu  ling: <br> <br>
+        性能: 甘、淡，平。归肾、膀胱经<br> <br>
+        功效:水肿，水便不利，泄泻; <br> <br>
+        用法: 煎服，6-12g">猪苓  Zhu  ling</li>
+        
+           <li data-info="车前子 Che qian zi: <br> <br>
+        性能: 甘，微寒。归肝、肾、肺、小肠经<br> <br>
+        功效: 利尿通淋，渗湿止泻，清肝明目，祛痰止咳; <br> <br>
+        用法: 煎服，9～15g。包煎<br>使用注意:肾虚精滑者慎用。">车前子 Che qian zi</li>
+        
+           <li data-info="滑 石  Hua shi: <br> <br>
+        性能: 甘、淡，微寒。归膀胱、肺、胃经<br> <br>
+        功效: 利尿通淋，清热解暑，收湿敛疮; <br> <br>
+        用法: 10～20g。包煎<br>使用注意:脾虚、热病伤津及孕妇忌用。">滑 石  Hua shi</li>
+        
+       
+           <li data-info="通 草  Tong cao: <br> <br>
+        性能: 甘、淡，微寒。 归肺、胃经<br> <br>
+        功效: 利尿通淋，通经下乳; <br> <br>
+        用法: 煎服 6～12g<br>使用注意:孕妇忌用">通 草  Tong cao</li> 
+        
+           <li data-info="萆 薢  Bi  xie: <br> <br>
+        性能: 苦，平。 归肾、胃经<br> <br>
+        功效: 利湿去浊 ，祛风除痹; <br> <br>
+        用法: 煎服,9～15g<br>使用注意:肾阴亏虚贵精滑泄者慎用">萆 薢  Bi  xie</li> 
+            
+            
+        </ul>
+        
+        
+        <h3>2. กลุ่มยาขับร้อนชื้น利湿退黄</h3>
+        <ul id="medicineList3" class="medicine-list">
+
+        <li data-info="茵陈 Yin Chen: <br> <br>
+        性能: 辛、苦，微寒归脾、胃、肝、胆经<br> <br>
+        功效: 利湿退黄，解毒疗疮; <br> <br>
+        用法: 煎服，6-15g。外用适量。煎汤熏洗<br>使用注意:蓄血发黄者及血虚萎黄者慎用 ">茵陈 Yin Chen</li>
+        
+         <li data-info="金钱草  Jin qian cao: <br> <br>
+        性能: 甘、咸，微寒。 归肝、胆、肾、膀胱经<br> <br>
+        功效: 利湿退黄，利尿通淋，解毒消肿 ; <br> <br>
+        用法: 15-60g。鲜品加倍，外用适量。 ">金钱草  Jin qian cao</li>
+        
+        
+        <li data-info="虎 杖 Hu zhang: <br> <br>
+        性能: 微苦，微寒。归肝、胆、肺经<br> <br>
+        功效: 利湿退黄，清热解毒，散瘀止痛 ,化痰止咳 ; <br> <br>
+        用法: 煎服，9～15g。外用适量 <br>使用注意:孕妇忌服">虎 杖 Hu zhang</li>
+          
+    </ul>
+
+  
+          <h3>3. กลุ่มยา อบอุ่นภายใน 温中散寒</h3>
+        <ul id="medicineList4" class="medicine-list">
+            <li data-info="茵陈 Yin Chen: <br> <br>性能: 辛、苦，微寒归脾、胃、肝、胆经<br><br> 功效: 利湿退黄，解毒疗疮; <br><br> 用法: 煎服，6-15g。外用适量。煎汤熏洗<br> 使用注意: 蓄血发黄者及血虚萎黄者慎用">茵陈 Yin Chen</li>
+            
+            <li data-info="肉 桂   Rou gui: <br> <br>
+        性能: 辛、甘，大热。归肾、脾、心、肝经<br> <br>
+        功效: 补火助阳，散寒止痛 ，温经通脉 ， 引火归原;<br>  <br>
+        用法: 煎服，1～4.5g，宜后下或焗服；研末冲服，每次1～2g<br>使用注意阴虚火旺，里有实热，血热妄行出血及孕妇忌用。畏赤石脂:">肉 桂   Rou gui</li>
+        
+        
+        <li data-info="小茴香   Xiao hui xiang: <br> <br>
+        性能: 辛，温。归肝、肾、脾、胃经<br> <br>
+        功效: 散寒止痛 ，理气和胃;<br>  <br>
+        用法: 煎服，3~6g。外用适量<br>使用注意:None">小茴香   Xiao hui xiang</li>
+        
+         
+        <li data-info="高良姜  Gaoliang jiang: <br><br>
+        性能: 辛，热。归脾、胃经<br> <br>
+        功效: 散寒止痛 ，温中止呕;<br>  <br>
+        用法: 煎服，3~6g。研末服，每次3g<br>使用注意:None">高良姜  Gaoliang jiang</li>
+        
+    	
+        
+         <li data-info="干姜   Gan jiang: <br> <br>
+        性能: 辛，热。归脾、胃、肾、心、肺经<br> <br>
+        功效: 温中散寒，回阳救逆，温肺化饮;<br> <br> 
+        用法: 3～10g，煎服<br>使用注意:本品辛热燥烈，阴虚内热、血热妄行者忌用">干姜   Gan jiang</li>
+        
+            <li data-info="吴茱萸  Wu zhu yu: <br> <br>
+        性能: 辛、苦，热。有小毒。归肝、脾、胃、肾<br> <br>
+        功效: 散寒止痛 ，降逆止呕 ，助阳止泻;<br>  <br>
+        用法: 煎服，1.5～4.5g。外用适量<br>使用注意:本品辛热燥烈，易耗气动火，故不宜多用、久服。阴虚有热者忌用">吴茱萸  Wu zhu yu</li>
+        
+          <li data-info="丁 香   Ding xiang: <br> <br>
+        性能: 辛，温。归脾、胃、肺、肾经<br> <br>
+        功效: 温中 降逆，散寒止痛，温肾助阳;<br> <br> 
+        用法: 煎服，1~3g。外用适量<br>使用注意:本品辛热燥烈，易耗气动火，故不宜多用、久服。阴虚有热者忌用">丁 香   Ding xiang</li>
+        
+        
+                  <li data-info=" 花椒  Hua jiao    : <br> <br>
+        性能: 辛、温。 归脾、胃、肾经<br> <br>
+        功效: 温中止痛，杀虫止痒;<br>  <br>
+        用法: 煎服，3~6g。外用适量，煎汤熏洗<br>使用注意:None">花椒  Hua jiao</li>
+            
+
+        </ul>
+        
+        
+        <h3>4. กลุ่มยา 行气，破气，理气</h3>
+        <ul id="medicineList6" class="medicine-list">
+
+         <li data-info="陈 皮 Chen pi: <br> <br>
+        性能: 辛、苦，温。归脾、肺经<br> <br>
+        功效: 理气健脾，燥湿化痰，降逆止呕;<br>  <br>
+        用法: 煎服，3-9g<br>使用注意:None">陈 皮 Chen pi</li>
+        
+         <li data-info="枳 实 Zhi shi: <br> <br>
+        性能: 苦、辛、酸，温。归脾、胃、大肠经<br> <br>
+        功效: 破气除痞，化痰消积 ;<br> <br> 
+        用法: 煎服，3～9g，大量可用至30g<br>使用注意:孕妇慎用">枳 实 Zhi shi</li>
+        
+        <li data-info="香 附  Xiang fu: <br> <br>
+        性能: 辛、微苦、微甘，平。归肝、脾、三焦经<br> <br>
+        功效: 疏肝解郁，调经止痛, 理气调中  ;<br> <br> 
+        用法: 煎服，6～9g<br>使用注意:None">香 附  Xiang fu</li>
+        
+         <li data-info=" 川楝子 Chuan lian zi: <br> <br>
+        性能: 苦，寒。有小毒。归肝、胃、小肠、膀胱<br> <br>
+        功效: 行气止痛 ，杀虫   ;<br>  <br>
+        用法: 煎服，4.5～9g。外用适量<br>使用注意:本品有毒，不宜过量或持续服用，以免中毒。又因性寒，脾胃虚寒者慎用">川楝子 Chuan lian zi</li>
+        
+          <li data-info=" 佛 手 Fo  shou: <br> <br>
+        性能: 辛﹑苦﹑温归肝﹑脾﹑胃﹑肺经<br> <br>
+        功效: 疏肝解郁，理气和中，燥湿化痰  ;<br>  <br>
+        用法: 煎服，3-9 g<br>使用注意:None">川楝子 Chuan lian zi</li>
+        
+         <li data-info=" 青皮 Qing pi: <br> <br>
+        性能: 苦、辛，温。归肝、胆、胃经<br> <br>
+        功效: 疏肝破气 ，消积化滞 ;<br>  <br>
+        用法: 煎服，3-9g<br>使用注意:None">青皮 Qing pi</li>
+        
+          <li data-info="  木 香  Mu xiang: <br> <br>
+        性能: 辛、苦，温。归脾、胃、大肠、胆、三焦<br> <br>
+        功效: 行气止痛，健脾消食  ;<br>  <br>
+        用法: 煎服，1.5～6g<br>使用注意:None"> 木 香  Mu xiang</li>
+        
+        <li data-info="  沉 香 Chen xiang: <br> <br>
+        性能: 辛、苦，微温。归脾、胃、肾经<br> <br>
+        功效: 行气止痛，温中止呕，纳气平喘  ;<br>  <br>
+        用法: 1.5～4.5g，入煎应后下<br>使用注意:None"> 沉 香 Chen xiang</li>
+        
+         <li data-info="  乌 药  Wu yao: <br> <br>
+        性能: 辛﹑温 归肺﹑脾﹑肾﹑膀胱经<br> <br>
+        功效: 行气止痛, 温肾散寒  ;<br>  <br>
+        用法: 煎服，3-9 g<br>使用注意:None"> 乌 药  Wu yao</li>
+        
+           <li data-info="  薤 白 Xie bai: <br> <br>
+        性能: 辛、苦，温。归肺、胃、大肠经<br> <br>
+        功效: 通阳散结, 行气导滞;<br>  <br>
+        用法:煎服，5～9g<br>使用注意:None"> 薤 白 Xie bai</li>
+        
+            <li data-info="  大腹皮 Da fu pi: <br> <br>
+        性能: 辛﹑微温归脾﹑胃﹑大肠﹑小肠经<br> <br>
+        功效: 行气宽中，利水消肿	;<br> <br> 
+        用法:煎服，4.5-9 g<br>使用注意:None">大腹皮 Da fu pi</li>
+        
+            <li data-info=" 玫瑰花  mei gui hua: <br> <br>
+        性能: 甘、微苦，温。归肝、脾经<br> <br>
+        功效: 疏肝解郁，活血止痛;<br> <br> 
+        用法:煎服，1.5～6g<br>使用注意:None"> 玫瑰花  mei gui hua</li>
+        
+            </ul>
+            
+             <h3>5. กลุ่มยา 消食</h3>
+        <ul id="medicineList5" class="medicine-list">
+
+        <li data-info="山  楂   shan zha: <br> <br>
+        性能: 酸、甘，微温。归脾、胃、肝经<br> <br>
+        功效: 消食化积，行气散瘀;<br>  <br>
+        用法: 煎服，10～15g，大剂量30g<br>使用注意:脾胃虚弱而无积滞者或胃酸分泌过多者慎用">山  楂   shan zha</li>
+        
+        <li data-info="麦  芽  mai ya: <br> <br>
+        性能: 甘、平。归脾、胃、肝经<br> <br>
+        功效: 消食健胃，回乳消胀;<br> <br> 
+        用法: 煎服，10～15g，大剂量30～120g<br>使用注意:授乳期妇女不宜使用">麦  芽  mai ya</li>
+        
+    
+        <li data-info=" 鸡内金  ji nei jin: <br> <br>
+        性能: 甘、平。归脾、胃、小肠、膀胱经<br> <br>
+        功效: 消食健脾，涩精止遗;<br>  <br>
+        用法: 煎服，3～10g<br>使用注意:脾虚无积滞者慎用"> 鸡内金  ji nei jin</li>
+        
+         <li data-info=" 神  曲  shen qu: <br> <br>
+        性能: 甘、辛，温。归脾、胃经<br> <br>
+        功效: 消食和胃;<br>  <br>
+        用法: 煎服，6～15g。消食宜炒焦用<br>使用注意:None"> 神  曲  shen qu</li>
+        
+         <li data-info=" 莱菔子  Lai fu zi: <br> <br>
+        性能: 辛、甘、平。归肺、脾、胃经经<br> <br>
+        功效: 消食除胀，降气化痰;<br> <br> 
+        用法: 煎服，6～10g<br>使用注意:本品辛散耗气，故气虚及无食积、痰滞者慎用。 不宜与人参同用"> 莱菔子  Lai fu zi</li>
+
+        
+          </ul>
+
+        <h3>6. กลุ่มยา 杀虫消积</h3>
+        <ul id="medicineList7" class="medicine-list">
+
+       <li data-info="使君子 shi jun zi: <br> <br>
+        性能: 甘，温。归脾、胃经<br> <br>
+        功效: 杀虫消积;<br>  <br>
+        用法: 煎服，9～12g。捣碎，取仁炒香嚼服，6～9g。小儿每岁1～1.5粒<br>使用注意:大量服用可致呃逆、眩晕、呕吐、腹泻等反应。若与热茶同服，亦能引起呃逆、腹泻，故服用时当忌饮茶">使君子 shi jun zi</li>
+        
+        <li data-info="槟  榔  bing lang: <br> <br>
+        性能: 苦、辛，温。归胃、大肠经<br> <br>
+        功效: 杀虫消积，行气，利水，截疟;<br>  <br>
+        用法: 煎服，3～10g。驱绦虫、姜片虫30～60g。生用力佳，炒用力缓；鲜者优于陈久者<br>使用注意:脾虚便溏或气虚下陷者忌用，孕妇慎用 ">槟  榔  bing lang</li>
+        
+        <li data-info="苦楝皮  ku lian pi: <br> <br>
+        性能: 苦，寒。有毒。归肝、脾、胃经<br> <br>
+        功效: 杀虫，疗癣;<br> <br> 
+        用法: 煎服，4.5～9g。鲜品15～30g<br>使用注意:本品有毒，不宜过量或持续久服。有效成分难溶于水，需文火久煎">苦楝皮  ku lian pig</li>
+        
+         <li data-info="南瓜子 nan gua zi: <br> <br>
+        性能: 甘，平。归胃、大肠经<br> <br>
+        功效: 杀虫;<br>  <br>
+        用法: 研粉，60～120g。冷开水调服<br>使用注意:None">南瓜子 nan gua zi</li>
+        
+          </ul>
+          
+           <h3>7. กลุ่มยา 清热息风 平肝潜阳</h3>
+        <ul id="medicineList8" class="medicine-list">
+
+       <li data-info="石决明   shi jue ming: <br> <br>
+        性能: 咸，寒。归肝经<br> <br>
+        功效: 平肝潜阳，清肝明目;<br>  <br>
+        用法: 煎服，3～15g，应打碎先煎<br>使用注意:本品咸寒易伤脾胃，故脾胃虚寒，食少便溏者慎用">石决明   shi jue ming</li>
+        
+        <li data-info="珍珠母 zhen zhu mu: <br> <br>
+        性能: 咸，寒。归肝、心经<br> <br>
+        功效: 平肝潜阳，安神，定惊明目;<br>  <br>
+        用法: 煎服，10～25g，应打碎先煎<br>使用注意:脾胃虚寒，孕妇者慎用">珍珠母 zhen zhu mu</li>
+
+
+          <li data-info="钩 藤  gou teng: <br> <br>
+        性能: 甘，凉。  归肝、心包经<br> <br>
+        功效: 清热平肝，息风定惊;<br>  <br>
+        用法: 煎服，3～12g，入煎剂宜后下<br>使用注意:None">钩 藤  gou teng</li>
+
+
+        
+          <li data-info="牡 蛎   mu li: <br> <br>
+        性能: 咸，微寒。归肝、胆、肾经<br> <br>
+        功效: 重镇安神，潜阳补阴，软坚散节;<br>  <br>
+        用法: 煎服，9～30g，应打碎先煎<br>使用注意:None">牡 蛎   mu li</li>
+
+        
+          <li data-info="天 麻  tian ma: <br> <br>
+        性能: 甘，平。归肝经<br> <br>
+        功效: 息风止痉，平抑肝阳，祛风通络;<br>  <br>
+        用法: 煎服，3～9g<br>使用注意:None">天 麻  tian ma</li>
+          
+          
+           </ul>
+
+
+		  <h3>8. กลุ่มยา 开窍醒神 定惊息风</h3>
+        <ul id="medicineList9" class="medicine-list">
+
+       <li data-info="地龙 di long: <br> <br>
+        性能: 咸，寒。归肝、脾、膀胱包经<br> <br>
+        功效: 清热定惊，通络，平喘，利尿;<br> <br> 
+        用法: 煎服，4.5～9g<br>使用注意:None">地龙 di long</li>
+
+
+    <li data-info="蜈蚣 wu gong: <br> <br>
+        性能: 辛，温。有毒。归肝经<br> <br>
+        功效: 息风镇痉，攻毒散结，通络止痛;<br>  <br>
+        用法: 煎服，3～5g<br>使用注意:用量不宜过大。孕妇慎用">蜈蚣 wu gong</li>
+
+
+    
+    <li data-info="僵蚕 jiang can: <br> <br>
+        性能: 咸、辛，平。归肝、肺、胃经<br> <br>
+        功效: 祛风定惊，化痰散结;<br> <br>
+        用法: 煎服，5～9g<br>使用注意:None">僵蚕 jiang can</li>
+
+
+     <li data-info="石菖蒲 shi chang pu: <br> <br>
+        性能: 辛、苦，温。 归心、胃经<br> <br>
+        功效: 开窍醒神 ，化湿和胃，宁神益志;<br> <br> 
+        用法: 煎服，3～9g<br>使用注意:None">石菖蒲 shi chang pu</li>
+
+         <li data-info="冰 片 bing pian: <br><br> 
+        性能: 辛、苦，微寒。 归心、脾。肺经<br> <br>
+        功效: 开窍醒神 ，清热止痛;<br>  <br>
+        用法: 丸散每次0.03—0.1g,不宜入煎剂<br>使用注意:孕妇忌用">冰 片 bing pian</li>
+ 
+   </ul>
+		<h3>9. กลุ่มยา 补气</h3>
+        <ul id="medicineList10" class="medicine-list">
+
+    
+    
+       <li data-info="人参 ren shen: <br> <br>
+        性能: 甘、微苦，平。归肺、脾、心经<br> <br>
+        功效: 大补元气，补脾益肺，生津，安神益智;<br> <br> 
+        用法: 煎服，3～19g，另煎<br>使用注意:反藜芦">人参 ren shen</li>
+
+
+    <li data-info="党参 dang shen: <br> <br>
+        性能: 甘，平。归脾、肺经<br> <br>
+        功效: 补脾肺气，补血，生津;<br>  <br>
+        用法: 煎服，9～30g<br>使用注意:反藜芦">党参 dang shen</li>
+
+
+    <li data-info="太子参 tai zi shen: <br> <br>
+        性能: 甘、微苦，平归脾、肺经<br> <br>
+        功效: 补气健脾，生津润肺;<br>  <br>
+        用法: 煎服，9～30g<br>使用注意:None">太子参 tai zi shen</li>
+
+
+      <li data-info="黄芪  huang qi: <br> <br>
+        性能: 甘，微温。归脾、肺经<br> <br>
+        功效: 健脾补中，升阳举陷，益卫固表，利水，托毒生肌;<br>  <br>
+        用法: 煎服9～30g<br>使用注意:None">黄芪  huang qi</li>
+
+
+        <li data-info="白术 bai zhu: <br> <br>
+        性能: 甘、苦，温。归脾、胃经<br> <br>
+        功效: 健脾益气，燥湿利水，止汗，安胎;<br>  <br>
+        用法: 煎服，6～12g<br>使用注意:苦燥伤阴，热病伤津，阴虚者不宜">白术 bai zhu</li>
+
+
+        <li data-info="山药 shan yao: <br> <br>
+        性能: 甘，平。归脾、肺、肾经<br> <br>
+        功效: 补脾养胃 ，生津益肺，补肾涩精;<br>  <br>
+        用法: 煎服，15～30g<br>使用注意:None">山药 shan yao</li>
+
+
+             <li data-info="甘草 gan cao: <br> <br>
+        性能: 甘，平。 归心、脾、肺、胃经<br> <br>
+        功效: 补脾益气 ，祛痰止咳，缓急止痛，清热解毒，调和诸药;<br>  <br>
+        用法: 煎服，1.5～9g<br>使用注意:反京大戟、芫花、甘遂、海藻，有助湿壅气，湿盛胀满、水肿不宜用。大剂量久服">甘草 gan cao</li>
+
+
+         <li data-info="大枣 da zao: <br> <br>
+        性能: 甘，温。归脾、胃、心经<br> <br>
+        功效: 补中益气 ，养血安神;<br>  <br>
+        用法: 煎服，6-12g <br>使用注意:None">大枣 da zao</li>
+        
+           </ul>
+
+
+
+
+		<h3>10. กลุ่มยา 补肾 </h3>
+        <ul id="medicineList11" class="medicine-list">
+
+    
+    
+       <li data-info="鹿茸 lu  rong: <br> <br>
+        性能: 甘、咸，温。归肾、肝经<br> <br>
+        功效: 补肾阳,益精血，强筋骨,调冲任托疮毒;<br>  <br>
+        用法: 煎服，1～2g<br>使用注意:剂量宜小，逐渐加量，不可骤用大量，发热当忌">鹿茸 lu  rong</li>
+
+
+      <li data-info="杜仲 du zhong: <br> <br>
+        性能: 甘，温。归肝、肾经<br> <br>
+        功效: 补肝肾 ,强筋骨 ,安胎;<br> <br> 
+        用法: 煎服，10～15g<br>使用注意:阴虚火旺慎用">杜仲 du zhong</li>
+
+
+        <li data-info="肉苁蓉 rou chong rong: <br> <br>
+        性能: 甘，咸，温。归肾、大肠经<br> <br>
+        功效: 补肾助阳，益精血, 润肠通便;<br> <br> 
+        用法: 】  煎服，10～15g<br>使用注意:本品能助阳、滑肠，故阴虚火旺及大便泄泻、肠胃实热、大便秘结者不宜用">肉苁蓉 rou chong rong</li>
+
+        <li data-info="菟丝子 tu si zi: <br> <br>
+        性能: 辛、甘，平。归肾、肝、脾经<br> <br>
+        功效: 补肾益精, 养肝明目，止泻，安胎;<br>  <br>
+        用法: 煎服，10～20g<br>使用注意:但偏补阳，阴虚火旺、大便燥结、小便短赤者不宜用">菟丝子 tu si zi</li>
+
+        <li data-info="淫羊藿 yin yang huo: <br> <br>
+        性能: 辛、甘，温。归肾、肝经<br> <br>
+        功效: 补肾壮阳, 祛风除湿;<br>  <br>
+        用法: 煎服，3～15g<br>使用注意:阴虚火旺不宜服">淫羊藿 yin yang huo</li>
+
+
+        <li data-info="续断 xu duan: <br> <br>
+        性能: 苦，辛，微温。归肝、肾经<br> <br>
+        功效: 补益肝肾，强筋健骨, 止血安胎疗伤续折;<br> <br>
+        用法: 煎服，9～15g<br>使用注意:风湿热痹忌用">续断 xu duan</li>
+
+         <li data-info="补骨脂 bu gu zhi: <br> <br>
+        性能: 苦，辛，温。归肾、脾经<br> <br>
+        功效: 补肾壮阳，固精缩尿，纳气平喘，温脾止泻;<br>  <br>
+        用法: 】  煎服，5～10g<br>使用注意:能伤阴助火，故阴虚火旺及大便秘结者忌用">补骨脂 bu gu zhi</li>
+
+			   </ul>	
+
+        
+        <h3>11. กลุ่มยา 补血/ 活血/ 养阴 / 生津 </h3>
+        <ul id="medicineList12" class="medicine-list">
+
+    
+    
+        <li data-info="当归  dang gui: <br> <br>
+        性能: 甘、辛，温。归肝、心、脾经<br> <br>
+        功效: 补血调经, 活血止痛, 润肠通便;<br>  <br>
+        用法: 煎服，5～15g<br>使用注意:湿盛中满、大便溏泻忌用">当归  dang gui</li>
+
+      
+      <li data-info="熟地黄 shu di huang: <br> <br>
+        性能: 甘，微温。归肝、肾经<br> <br>
+        功效: 补血养阴，填精益髓;<br>  <br>
+        用法: 煎服，10～30g<br>使用注意:None">熟地黄 shu di huang</li>
+
+          <li data-info="阿胶 e jiao: <br> <br>
+        性能: 甘，平。归肺、肝、肾经<br> <br>
+        功效: 补血，滋阴，润肺，止血;<br> <br> 
+        用法: 煎服，5～15g；冲服<br>使用注意:粘腻，脾胃虚弱者慎用">阿胶 e jiao</li>
+
+        <li data-info="白芍 bai shao: <br> <br>
+        性能: 苦、酸，微寒。归肝、脾经<br> <br>
+        功效: 养血敛阳，柔肝止痛，平抑肝阳;<br>  <br>
+        用法: 煎服，5～15g<br>使用注意:反藜芦。虚寒不宜">白芍 bai shao</li>
+
+
+
+        <li data-info="何首乌 he shou wu: <br> <br>
+        性能: 苦、甘、涩，微温。归肝、肾经<br> <br>
+        功效: 制用：补益精血  /生用：解毒，截疟，润肠通便 ;<br>  <br>
+        用法: 煎服，10～30g<br>使用注意:大便溏泄及湿痰较重者不宜用">何首乌 he shou wu</li>
+
+        
+        <li data-info="百合 bai he: <br> <br>
+        性能: 甘，微寒。归肺、心、胃经<br> <br>
+        功效: 养阴润肺，  清心安神 ;<br>  <br>
+        用法: 煎服，6~12g<br>使用注意:None">百合 bai he</li>
+
+      <li data-info="麦冬mai dong: <br> <br>
+        性能: 甘、微苦，微寒。归胃、肺、心经<br> <br>
+        功效: 养阴生津，润肺清心 ;<br>  <br>
+        用法: 煎服，6~12g<br>使用注意:None">麦冬mai dong</li>
+
+
+        <li data-info="天冬 tian dong: <br> <br>
+        性能: 甘、苦，寒。归肺、肾、胃经<br> <br>
+        功效: 养阴润燥，清肺生津 ;<br>  <br>
+        用法: 煎服，6~12g <br>使用注意:None">天冬 tian dong</li>
+
+
+        <li data-info="石斛 shi hu: <br> <br>
+        性能: 甘、微寒。归胃、肾经<br> <br>
+        功效: 益胃生津，滋阴清热     ;<br>  <br>
+        用法: 煎服，6~12g  <br>使用注意:None">石斛 shi hu</li>
+
+        
+        <li data-info="玉竹 yu zhu: <br> <br>
+        性能: 甘、微寒。归肺、胃经<br> <br>
+        功效: 养阴润燥，  生津止渴     ;<br>  <br>
+        用法: 煎服，6~12g <br>使用注意:None">玉竹 yu zhu</li>
+
+
+          <li data-info="枸杞子 gou qi zi: <br><br> 
+        性能: 甘、平。归肝、肾经<br> <br>
+        功效: 滋补肝肾，益精明目 ;<br>  <br>
+        用法: 煎服，6~12g <br>使用注意:None">枸杞子 gou qi zi</li>
+
+
+         <li data-info="龟甲 gui jia: <br> <br>
+        性能: 甘、寒。归肾、肝、心经<br> <br>
+        功效: 滋阴潜阳,益肾健骨,养血补心;<br>  <br>
+        用法: 煎服，9~24g ，宜先煎，本品药砂炒醋淬后，更容易煎出有效成分，并除去腥气<br>使用注意:None">龟甲 gui jia</li>
+        
+           </ul>	
+           
+           
+            <h3>12. กลุ่มยา  益气  /固表止汗 </h3>
+        <ul id="medicineList13" class="medicine-list">
+
+    
+    
+         <li data-info="麻黄根ma huang gen: <br> <br>
+        性能: 甘、微涩，平，归肺经<br> <br>
+        功效: 固表止汗;<br> <br> 
+        用法: 煎服3～9g <br>使用注意:None">麻黄根ma huang gen</li>
+
+        
+        <li data-info="浮小麦 fu xiao mai: <br> <br>
+        性能: 甘，凉；归心经<br> <br>
+        功效: 益气止汗，除热止汗;<br> <br> 
+        用法: 煎服15～30g  <br>使用注意:有表出汗者忌用">浮小麦 fu xiao mai</li>
+          </ul>	
+          
+          
+             <h3>13.กลุ่มยา  收敛固涩 / 益气生津 / 止泻  </h3>
+        <ul id="medicineList14" class="medicine-list">
+
+    
+    
+       <li data-info="五味子 wu wei zi: <br> <br>
+        性能: 酸、甘，温。入肺、肾、心经<br> <br>
+        功效: 收敛固涩, 益气生津, 补肾宁心;<br> <br> 
+        用法: 3-6g，煎服 <br>使用注意:表邪末解，内有实热，咳嗽初起，麻疹初期，均不宜用">五味子 wu wei zi</li>
+
+        
+        <li data-info="五倍子 wu bei zi: <br> <br>
+        性能: 酸、甘，温。入肺、肾、心经<br> <br>
+        功效: 收敛固涩, 益气生津, 补肾宁心;<br> <br> 
+        用法: 3-6g，煎服 <br>使用注意:表邪末解，内有实热，咳嗽初起，麻疹初期，均不宜用">五倍子 wu bei zi</li>
+
+
+           <li data-info="乌梅  wu mei: <br> <br>
+        性能: 酸、涩，平。入肝、脾、肺、大肠经<br> <br>
+        功效: 敛肺止咳，涩肠止泻，安蛔止痛，生津止渴;<br>  <br>
+        用法: 煎服3-10g  <br>使用注意:外有表邪或内有实热积滞者不宜服">乌梅  wu mei</li>
+
+
+             <li data-info="赤石脂  chi shi zhi: <br> <br>
+        性能: 甘、涩，温。入大肠、胃经<br> <br>
+        功效: 涩肠止泻，收敛止血，敛疮生肌;<br>  <br>
+        用法: 煎服10-20g <br>使用注意:湿热积滞泻痢者忌用；孕妇慎用；畏肉桂">赤石脂  chi shi zhi</li>
+
+
+             <li data-info="山茱萸 shan zhu yu: <br> <br>
+        性能: 酸、涩，微温；归肝、肾经<br> <br>
+        功效: 补益肝肾,收敛固涩;<br>  <br>
+        用法: 水煎服5-10g<br>使用注意:湿热而致小便淋涩者，不宜应用">山茱萸 shan zhu yu</li>
+
+
+            <li data-info="覆盆子 fu pen zi: <br> <br>
+        性能: 甘、酸、微温，主入肝、肾<br> <br>
+        功效: 固精止尿，益肝肾明目;<br>  <br>
+        用法: 煎服5-10g<br>使用注意:None">覆盆子 fu pen zi</li>
+
+            <li data-info="桑螵蛸 sang piao xiao: <br> <br>
+        性能: 酸、涩，平归肾、膀胱、大肠经<br> <br>
+        功效: 固精缩尿，补肾助阳;<br>  <br>
+        用法: 煎服6-12g<br>使用注意:本品助阳固涩、故阴虚多火，膀胱有热而小便频数者忌用">桑螵蛸 sang piao xiao</li>
+
+
+           <li data-info="莲子lian zi: <br> <br>
+        性能: 甘、涩，平归脾、肾、心经<br> <br>
+        功效: 固精止带，补脾止泻，益肾养心;<br>  <br>
+        用法: 煎服10-15g 去心打碎用<br>使用注意:None">莲子lian zi</li>
+
+             <li data-info="芡实qian shi: <br> <br>
+        性能: 甘、涩，平归脾，肾经<br> <br>
+        功效: 益肾固精, 健脾止泻， 除湿止带;<br>  <br>
+        用法: 煎服10-15g<br>使用注意:None">芡实qian shi</li>
+
+
+
+    </ul>
+    
+
+             <h3>14. กลุ่มยา  凉血止血 / 解毒敛疮 / 温经  </h3>
+        <ul id="medicineList15" class="medicine-list">
+
+
+          <li data-info="小蓟  xiao ji: <br> <br>
+        性能: 甘、苦，凉。 入心、肝经<br><br> 
+        功效: 凉血止血, 散瘀解毒消痈;<br><br>  
+        用法: 煎服，10～15g<br>使用注意:None">小蓟  xiao ji</li>
+
+        <li data-info="地榆  di  yu: <br> <br>
+        性能: 苦、酸，微寒。入肝、胃、大肠经<br> <br>
+        功效: 凉血止血，解毒敛疮;<br> <br> 
+        用法: 煎服10～15g<br>使用注意:None">地榆  di  yu</li>
+
+
+        <li data-info="白茅根 bai mao gen: <br> <br>
+        性能: 甘，寒。归肺、胃、膀胱经<br> <br>
+        功效: 凉血止血, 清热利尿, 清肺胃热;<br>  <br>
+        用法: 煎服，15-30g<br>使用注意:None">白茅根 bai mao gen</li>
+
+
+        <li data-info="茜草 qian cao: <br> <br>
+        性能: 苦、寒。入肝经<br> <br>
+        功效: 凉血化瘀止血, 通经;<br>  <br>
+        用法: 煎服，10～15g<br>使用注意:None">茜草 qian cao</li>
+
+
+        <li data-info="白及 bai ji: <br> <br>
+        性能: 苦、甘、涩，寒 。归肺、胃、肝经<br> <br>
+        功效: 收敛止血，消肿生肌;<br> <br> 
+        用法: 煎服，3～10g<br>使用注意:不宜与乌头配伍(十八反)">白及 bai ji</li>
+
+
+          <li data-info="艾叶 ai ye: <br> <br>
+        性能: 辛、苦，温。有小毒 归肝、脾、肾经<br> <br>
+        功效: 】 温经止血，散寒调经，安胎;<br> <br> 
+        用法: 煎服，3～10g<br>使用注意:None">艾叶 ai ye</li>
+
+        
+          <li data-info="炮姜 pao jiang: <br><br> 
+        性能: 苦、涩，温。归脾、肝经<br> <br>
+        功效: 】 温经止血，温中止痛;<br> <br> 
+        用法: 煎服，3～6g<br>使用注意:None">炮姜 pao jiang</li>
+
+          </ul>	
+        
+         <h3>15.กลุ่มยา  活血祛瘀 / 行气止痛/调经  </h3>
+        <ul id="medicineList16" class="medicine-list">
+
+  <li data-info="川芎chuan xiong: <br> <br>
+        性能: 辛，温。归肝、胆、心包经<br> <br>
+        功效: 活血行气，祛风止痛;<br> <br> 
+        用法: 煎服，3～9g。治头风可用至30g<br>使用注意:None">川芎chuan xiong</li>
+
+
+          <li data-info="延胡淑Yan hu suo: <br> <br>
+        性能: 辛、苦，温。归心、肝、脾经<br> <br>
+        功效: 活血、行气、止痛;<br>  <br>
+        用法: 煎服，3～10g<br>使用注意:None">延胡淑Yan hu suo</li>
+
+        
+          <li data-info="郁金Yu jin: <br> <br>
+        性能: 辛、苦，寒。归肝、胆、心经<br> <br>
+        功效: 活血止痛、行气解郁、清心凉血、利胆退黄;<br>  <br>
+        用法: 煎服，5～12g。研末服2～5g<br>使用注意:畏丁香">郁金Yu jin</li>
+
+        
+          <li data-info="乳香Ru xiang: <br> <br>
+        性能: 辛、苦，温。归心、肝、脾经<br><br> 
+        功效: 活血行气止痛、消肿生肌;<br> <br> 
+        用法: 煎服，3～10g。宜炒去油用<br>使用注意:None">乳香Ru xiang</li>
+
+
+             <li data-info="没药Mo yao: <br> <br>
+        性能: 辛、苦，平。归心、肝、脾经<br> <br>
+        功效: 活血止痛、消肿生肌;<br>  <br>
+        用法: 煎服，3～10g。外用适量<br>使用注意:同乳香">没药Mo yao</li>
+
+             <li data-info="五灵脂Wu ling zhi: <br> <br>
+        性能: 苦、咸、甘，温。归肝经<br> <br>
+        功效: 活血止痛、化瘀止血;<br>  <br>
+        用法: 煎服，3～10g。包煎<br>使用注意:1.血虚无瘀及孕妇慎用。2.不宜与人参同用">五灵脂Wu ling zhi</li>
+ </ul>	
+ 
+ 
+ 
+  <h3>16.กลุ่มยา 活血调经、祛瘀止痛/凉血 /通便/平喘/破血行气  </h3>
+        <ul id="medicineList17" class="medicine-list">
+
+  <li data-info="丹参dan shen: <br> <br>
+        性能: 苦，微寒。归心、心包、肝经<br> <br>
+        功效: 活血调经、祛瘀止痛、凉血消痈 除烦安神;<br>  <br>
+        用法: 煎服，5～15g<br>使用注意:反藜芦，孕妇慎用">丹参dan shen</li>
+
+
+           <li data-info="红花hong hua: <br> <br>
+        性能: 辛，温。归心、肝经<br> <br>
+        功效: 活血痛经、祛瘀止痛;<br>  <br>
+        用法: 煎服，3～10g<br>使用注意:孕妇忌用。有出血倾向者慎用">红花hong hua</li>
+
+
+               <li data-info="桃仁tao ren: <br> <br>
+        性能: 苦、甘，平。有小毒。归心、肝、大肠<br> <br>
+        功效: 活血祛瘀、润肠通便、止咳平喘;<br>  <br>
+        用法: 煎服，3～10g,捣碎用包煎<br>使用注意:孕妇忌用。便溏者慎用。本品有毒，不可过量">桃仁tao ren</li>
+
+
+               <li data-info="益母草yi mu cao: <br> <br>
+        性能: 辛、苦，微寒。归心、肝、膀胱经<br> <br>
+        功效: 活血痛经、利水消肿、清热解毒;<br>  <br>
+        用法: 10～30g<br>使用注意:无瘀滞及阴虚血少者忌用">益母草yi mu cao</li>
+
+
+                 <li data-info="泽兰ze lan: <br><br> 
+        性能: 辛、苦，微温。归肝、脾经<br> <br>
+        功效: 活血调经、祛瘀消痈、利水消肿;<br> <br> 
+        用法: 煎服，10～15g。外用适量<br>使用注意:血虚及无瘀滞者慎用">泽兰ze lan</li>
+
+
+        <li data-info="牛膝niu xi: <br> <br>
+        性能: 辛、苦、酸，平。归肝、肾经<br> <br>
+        功效: 活血通经、补肝肾、强筋骨、利水通淋、引火（血）下行;<br>  <br>
+        用法: 煎服6～15g。<br>使用注意:性专下行，孕妇月经过多，忌用；   中气下陷，脾虚泄泻，遗精者慎用">牛膝niu xi</li>
+
+
+
+        <li data-info="鸡血藤ji xue teng: <br> <br>
+        性能: 苦、微甘，温。归肝、肾经<br> <br>
+        功效: 行血补血、调经、舒筋活络;<br> <br> 
+        用法: 煎服10～30g<br>使用注意:None">鸡血藤ji xue teng</li>
+
+           <li data-info="王不留行wang bu liu xing: <br> <br>
+        性能: 苦，平。归肝、胃经<br> <br>
+        功效: 活血通经、下乳消痈、利尿通淋;<br>  <br>
+        用法: 煎服5～10g，外用适量<br>使用注意:孕妇慎用">王不留行wang bu liu xing</li>
+
+
+            <li data-info="土鳖虫tu bie chong: <br> <br>
+        性能: 咸，寒。有小毒。归肝经<br> <br>
+        功效: 破血逐瘀、续筋按骨;<br>  <br>
+        用法: 煎服3~10g<br>使用注意:孕妇慎用">土鳖虫tu bie chong</li>
+
+        
+            <li data-info="马钱子ma qian zi: <br> <br>
+        性能: 苦，寒。有大毒。归肝、脾经<br> <br>
+        功效: 散结消肿、通络止痛;<br>  <br>
+        用法: 0.3~0.6g，炮制后用<br>使用注意:内服不宜生用及多服久服。本品所含有毒成分能被皮肤吸收，故外用亦不宜大面积涂敷，孕妇禁用，体虚者忌用">马钱子ma qian zi</li>
+
+        
+            <li data-info="莪术e zhu: <br><br>
+        性能: 辛、苦，温。归肝、脾经<br> <br>
+        功效: 破血行气、消积止痛;<br>  <br>
+        用法: 煎服，3～15g<br>使用注意:孕妇及月经过多者忌用">莪术e zhu</li>
+
+           <li data-info="三棱san ling: <br> <br>
+        性能: 辛、苦，平。归肝、脾经<br> <br>
+        功效: 破血行气、消积止痛;<br>  <br>
+        用法: 煎服，3～10g<br>使用注意:孕妇及月经过多者忌用">三棱san ling</li>
+
+         <li data-info="水蛭shui zhi: <br> <br>
+        性能: 咸、苦，平。有小毒。归肝经<br> <br>
+        功效: 破血通经，逐瘀消癥;<br>  <br>
+        用法: 煎服，1.5~3g，研末服,0.3~0.5g<br>使用注意:孕妇及月经过多者忌用">水蛭shui zhi</li>
+ 
+ 
+ </ul>	
+ 
+ 
+ 
+ 		<h3>17.กลุ่มยา  กลุ่มยา  燥湿化痰、清热化痰/降气化痰/通便/平喘  </h3>
+        <ul id="medicineList18" class="medicine-list">
+
+   <li data-info="半夏ban xia: <br> <br>
+        性能: 辛，温。有毒。归脾、胃、肺经<br> <br>
+        功效: 燥湿化痰，降逆止呕，消痞散结；外用消肿止痛;<br>  <br>
+        用法: 煎服，3～10g<br>使用注意:反乌头。其性温燥，阴虚燥咳，血证，热痰，燥痰应慎用">半夏ban xia</li>
+
+
+          <li data-info="天南星tian nan xing: <br> <br>
+        性能: 苦、辛，温。有毒。归肺、肝、脾经<br> <br>
+        功效: 燥湿化痰，祛风解痉；外用散结消肿;<br>  <br>
+        用法: 煎服，3～l0g，多制用。外用适量<br>使用注意:阴虚燥痰及孕妇忌用">天南星tian nan xing</li>
+
+          <li data-info="川贝母chuan bei mu: <br> <br>
+        性能: 苦、甘，微寒。归肺、心经<br> <br>
+        功效: 清热化痰，润肺止咳，散结消肿;<br>  <br>
+        用法: 煎服，3～10g；研未服1～2g<br>使用注意:反乌头。脾胃虚寒及有湿痰者不宜用">川贝母chuan bei mu</li>
+
+
+          <li data-info="浙贝母zhe bei mu: <br> <br>
+        性能: 苦，寒。归肺、心经<br> <br>
+        功效: 清热化痰，散结消痈;<br>  <br>
+        用法: 煎服，3～10g<br>使用注意:同川贝母">浙贝母zhe bei mu</li>
+
+
+          <li data-info="竹茹zhu ru: <br> <br>
+        性能: 甘，微寒。归肺、胃经<br> <br>
+        功效: 清热化痰，除烦止呕;<br> <br> 
+        用法: 煎服，6～10g<br>使用注意:None">竹茹zhu ru</li>
+
+        <li data-info="桔梗jie geng: <br> <br>
+        性能: 苦、辛，平。归肺经<br> <br>
+        功效: 宣肺，祛痰，利咽，排脓;<br>  <br>
+        用法: 煎服，3～10g；或入丸、散<br>使用注意:本品性升散，凡气机上逆，呕吐、呛咳、眩晕、阴虚火旺咳血等不宜用，胃、十二指肠溃疡者慎服。用量过大易致恶心呕吐">桔梗jie geng</li>
+
+
+        <li data-info="苦杏仁ku xing ren: <br> <br>
+        性能: 苦，微温。有小毒。归肺、大肠经<br> <br>
+        功效: 止咳平喘，润肠通便;<br>  <br>
+        用法: 煎服，3～10g，宜打碎入煎<br>使用注意:阴虚咳喘及大便溏泻者忌用。本品有小毒，用量不宜过大；婴儿慎用。">苦杏仁ku xing ren</li>
+ 
+  </ul>	
+ 
+ 
+ 
+ 
+        
+        
+
+        <div id="result2" class="result"></div>
+    </div>
+</div>
+
+<script>
+    function searchMedicine() {
+        const searchQuery = document.getElementById('search').value.toLowerCase();
+        const medicineLists = document.querySelectorAll('.medicine-list li');
+        
+        medicineLists.forEach(item => {
+            const itemText = item.textContent.toLowerCase();
+            if (itemText.includes(searchQuery)) {
+                item.style.display = "block";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    }
+
+    function showCategory(category) {
+        const allLists = document.querySelectorAll('.medicine-list');
+        allLists.forEach(list => list.style.display = 'none'); // ซ่อนทั้งหมด
+
+        if (category === 'group1') {
+            document.getElementById('medicineList1').style.display = 'block';
+        } else if (category === 'group2') {
+            document.getElementById('medicineList2').style.display = 'block';
+        } else if (category === 'group3') {
+            document.getElementById('medicineList3').style.display = 'block';
+        } else if (category === 'group4') {
+            document.getElementById('medicineList4').style.display = 'block';
+     
+        
+           } else if (category === 'group5') {
+            document.getElementById('medicineList5').style.display = 'block';
+        
+            } else if (category === 'group6') {
+            document.getElementById('medicineList6').style.display = 'block';
+        
+        
+          } else if (category === 'group7') {
+            document.getElementById('medicineList7').style.display = 'block';
+        
+        
+        } else if (category === 'group8') {
+            document.getElementById('medicineList8').style.display = 'block';
+       
+        
+         } else if (category === 'group9') {
+            document.getElementById('medicineList9').style.display = 'block';
+       
+        
+        } else if (category === 'group10') {
+            document.getElementById('medicineList10').style.display = 'block';
+        
+        
+            } else if (category === 'group11') {
+            document.getElementById('medicineList11').style.display = 'block';
+        
+        
+               } else if (category === 'group12') {
+            document.getElementById('medicineList12').style.display = 'block';
+        
+        
+               } else if (category === 'group13') {
+            document.getElementById('medicineList13').style.display = 'block';
+        
+        
+              } else if (category === 'group14') {
+            document.getElementById('medicineList14').style.display = 'block';
+        
+        
+            } else if (category === 'group15') {
+            document.getElementById('medicineList15').style.display = 'block';
+        
+        
+        
+            } else if (category === 'group16') {
+            document.getElementById('medicineList16').style.display = 'block';
+        
+        
+          } else if (category === 'group17') {
+            document.getElementById('medicineList17').style.display = 'block';
+        
+        
+           } else if (category === 'group18') {
+            document.getElementById('medicineList18').style.display = 'block';
+        
+           } else if (category === 'group19') {
+            document.getElementById('medicineList19').style.display = 'block';
+        
+        
+          } else if (category === 'group20') {
+            document.getElementById('medicineList20').style.display = 'block';
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
+
+    function showAll() {
+        const allLists = document.querySelectorAll('.medicine-list');
+        allLists.forEach(list => list.style.display = 'block'); // แสดงทั้งหมด
+    }
+
+    document.querySelectorAll('.medicine-list li').forEach(item => {
+        item.addEventListener('click', function() {
+            const resultBox = item.closest('.column').querySelector('.result');
+            resultBox.innerHTML = `<p>${item.getAttribute('data-info').replace(/\\n/g, '<br>')}</p>`;
+        });
+    });
+</script>
+
+</body>
+</html>
+
+
+
